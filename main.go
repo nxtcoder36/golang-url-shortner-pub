@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/nxtcoder36/golang-url-shortner/cache"
-	"github.com/nxtcoder36/golang-url-shortner/db"
+	"github.com/nxtcoder36/golang-url-shortner-pub/cache"
+	"github.com/nxtcoder36/golang-url-shortner-pub/db"
 )
 
 func main() {

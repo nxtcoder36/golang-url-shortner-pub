@@ -1,4 +1,4 @@
-module github.com/nxtcoder36/golang-url-shortner
+module github.com/nxtcoder36/golang-url-shortner-pub
 
 go 1.24.2
 
