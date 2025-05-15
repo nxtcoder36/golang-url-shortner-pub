@@ -1,0 +1,35 @@
+version: '3'
+
+dotenv:
+  - .secrets/env
+
+tasks:
+  dev:
+    cmds:
+      - nodemon -q -e 'go' --signal SIGTERM --exec "echo '#running server' && go run main.go"
+
+  run-docker-local:
+    cmds:
+      - docker-compose -f docker-compose.yml up -d
+
+  docker-build:
+    requires:
+      vars:
+        - tag
+    cmds:
+      - docker build -t ghcr.io/nxtcoder36/url-shortner:{{.tag}} .
+      
+  docker-push:
+    requires:
+      vars:
+        - tag
+    cmds:
+      - task docker-build tag={{.tag}}
+      - docker push ghcr.io/nxtcoder36/url-shortner:{{.tag}}
+
+  docker-run:
+    requires:
+      vars:
+        - tag
+    cmds:
+      - docker run -d -p 3000:3000 ghcr.io/nxtcoder36/url-shortner:{{.tag}}

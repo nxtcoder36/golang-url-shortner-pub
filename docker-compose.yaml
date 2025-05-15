@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: local-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mohit
+      MONGO_INITDB_ROOT_PASSWORD: mohitpass
+    volumes:
+      - mongo-data:/data/db
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: ["redis-server", "--requirepass", "mohitpass"]
+
+  # Builds the app from the current directory (using your Dockerfile)
+  app:
+    build: .
+    container_name: url-shortner
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      REDIS_ADDR: redis:6379
+      REDIS_PASS: mohitpass
+      REDIS_TTL: 60
+      MONGO_URL: mongodb://mohit:mohitpass@mongo:27017/
+      MONGO_DB_NAME: url-shortner
+      MONGO_COLLECTION_NAME: urls
+      DOMAIN_NAME: http://localhost:3000
+    depends_on:
+      - redis
+      - mongo
+
+volumes:
+  redis-data:
+  mongo-data:
